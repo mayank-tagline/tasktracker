@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>add task</title>
+</head>
+<body>
+    <h1>add new task </h1>
+    <form action="/task/add" method="post">
+        {% csrf_token %}
+        <label for="task">task:</label>
+        <input type="text" id="task" name="task"><br><br>
+        <label for="description">description:</label>
+        <input type="text" id="description" name="description"><br><br>
+        <label for="status">status:</label>
+        <input type="text" id="status" name="status"><br><br>
+        <select name="workspace">
+            <option value="" selected disabled>Choose an option</option>
+            {% for ws in workspace %}
+                <option value="{{ ws.id }}">{{ ws.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

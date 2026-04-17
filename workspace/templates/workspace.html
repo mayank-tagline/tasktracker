@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>workspace</title>
+</head>
+<body>
+    <h1>this is workspace page with templates. </h1>
+    <br>
+    <a href="/workspace/add">create new workspace</a>
+    <br>
+    {% for space in workspace %}
+    <h4>{{ space.name }}</h4>
+    {% endfor %}
+</body>
+</html>
