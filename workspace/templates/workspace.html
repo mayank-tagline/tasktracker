@@ -1,17 +1,131 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>workspace</title>
+    <title>Workspace</title>
+
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background-color: #f5f7fa;
+        padding: 40px;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        text-decoration: none;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    .workspace-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        transition: 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+    }
+
+    .card h4 {
+        color: #333;
+    }
+
+    .empty {
+        color: #777;
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .footer {
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    .home-link {
+        text-decoration: none;
+        color: #3498db;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .home-link:hover {
+        color: #2980b9;
+    }
+</style>
+
+
 </head>
+
 <body>
-    <h1>this is workspace page with templates. </h1>
-    <br>
-    <a href="/workspace/add">create new workspace</a>
-    <br>
-    {% for space in workspace %}
-    <h4>{{ space.name }}</h4>
-    {% endfor %}
+    <main class="container">
+
+
+    <div class="header">
+        <h1>Workspaces</h1>
+        <a href="/workspace/add" class="btn">+ Create Workspace</a>
+    </div>
+
+    {% if workspace %}
+        <div class="workspace-list">
+            {% for space in workspace %}
+                <div class="card">
+                    <h4>{{ space.name }}</h4>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty">No workspaces yet. Create one to get started.</p>
+    {% endif %}
+
+    <div class="footer">
+        <a href="{% url 'home' %}" class="home-link">← Go back to Home</a>
+    </div>
+
+</main>
+
+
 </body>
 </html>

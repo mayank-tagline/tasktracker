@@ -3,6 +3,6 @@ from .models import Task
 # Register your models here.
 
 class TaskAdmin(admin.ModelAdmin):
-  list_display = ("id","task", "status","workspace")
+  list_display = ("id", "status","workspace")
   
 admin.site.register(Task, TaskAdmin)

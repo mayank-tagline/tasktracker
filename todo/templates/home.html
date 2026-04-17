@@ -3,14 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>task tracker</title>
-</head>
-<body>
-    <h1>
-        you can track your task here
-    </h1>
+    <title>Task Tracker</title>
 
-    <a href="/workspace"><h2>workspace</h2></a>
-    <a href="/task/"><h2>task</h2></a>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            transition: 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            background-color: #45a049;
+        }
+
+        .nav-links a.logout {
+            background-color: #e74c3c;
+        }
+
+        .nav-links a.logout:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>Track Your Tasks</h1>
+
+        <nav class="nav-links">
+            <a href="/workspace">Workspace</a>
+            <a href="/task/">Tasks</a>
+            <a href="/logout/" class="logout">Logout</a>
+        </nav>
+    </main>
 </body>
 </html>

@@ -22,5 +22,6 @@ urlpatterns = [
     path('', HomeView.as_view() , name='home'),
     path('', include('task.urls')),
     path('', include('workspace.urls')),
+    path('', include('account.urls')),
     path('admin/', admin.site.urls),
 ]

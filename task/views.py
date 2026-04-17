@@ -5,13 +5,17 @@ from django.views import View
 from .models import Task
 from workspace.models import WorkSpace
 from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 # def (request):
 #     templates = loader.get_template('task.html')
 #     return HttpResponse(templates.render())
 
-class TaskView(View):
+class TaskView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = ''
     def get(self, request):
         templates = loader.get_template('task.html')
         task = Task.objects.all()
@@ -20,7 +24,9 @@ class TaskView(View):
         }
         return HttpResponse(templates.render(context, request))
     
-class TaskCreateView(View):
+class TaskCreateView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = ''
     def get(self, request):
         workspace = WorkSpace.objects.all()
         context = {

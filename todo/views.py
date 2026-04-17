@@ -4,6 +4,8 @@ from django.views import View
 from django.views.generic import TemplateView, View
 from task.models import Task
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 
@@ -21,6 +23,8 @@ from django.shortcuts import render
 #         print(self.template_name)
 #         return render(request, self.template_name)
 
-class HomeView(View):
+class HomeView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = ''
     def get(self, request):
         return render(request, "home.html")
