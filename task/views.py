@@ -38,12 +38,16 @@ class TaskCreateView(LoginRequiredMixin, View):
     def post(self, request):
         ws =request.POST.get('workspace')
         workspace = WorkSpace.objects.get(id = ws)
+        current_user = self.request.user
+
+        print(current_user)
 
         task = Task(
             task= request.POST.get('task'),
             description=request.POST.get('description'),
-            status=request.POST.get('status'),
-            workspace=workspace
+            status="Pending",
+            workspace=workspace,
+            created_by = current_user
             )
         task.save()
         return redirect('task')
