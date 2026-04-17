@@ -111,9 +111,11 @@
     {% if workspace %}
         <div class="workspace-list">
             {% for space in workspace %}
+            <a href="/workspace/{{ space.id }}">
                 <div class="card">
                     <h4>{{ space.name }}</h4>
                 </div>
+            </a>
             {% endfor %}
         </div>
     {% else %}
