@@ -45,7 +45,7 @@ class TaskCreateView(LoginRequiredMixin, View):
         task = Task(
             task= request.POST.get('task'),
             description=request.POST.get('description'),
-            status="Pending",
+            status="pending",
             workspace=workspace,
             created_by = current_user
             )

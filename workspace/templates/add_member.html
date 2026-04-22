@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>add member</title>
+</head>
+<body>
+    <h1>Create Workspace</h1>
+
+        <form action="add-member" method="post">
+            {% csrf_token %}
+
+            <label for="name">add member </label>
+            <select name="name" id="name">
+                {% for user in users %}
+                    <option value="{{ user.username }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="add member">
+        </form>
+</body>
+</html>

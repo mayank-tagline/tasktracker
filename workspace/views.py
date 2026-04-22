@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.views import View
-
+from django.contrib.auth.models import User
 from task.models import Task
 from .models import WorkSpace
 from django.shortcuts import redirect
@@ -15,7 +15,9 @@ class WorkSpaceView(LoginRequiredMixin, View):
     redirect_field_name = ''
     def get(self, request):
         templates = loader.get_template('workspace.html')
-        workspace = WorkSpace.objects.all()
+        user = self.request.user
+        workspace = WorkSpace.objects.filter(created_by=user) | WorkSpace.objects.filter(members=user)
+        # workspace = WorkSpace.objects.all()
         context = {
             'workspace': workspace,
         }
@@ -29,7 +31,13 @@ class WorkSpaceCreateView(LoginRequiredMixin, View):
         return HttpResponse(templates.render())
     
     def post(self, request):
-        workspace = WorkSpace(name= request.POST.get('name'))
+        current_user = self.request.user
+
+        workspace = WorkSpace(
+            name= request.POST.get('name'),
+            created_by = current_user,
+            members = [current_user]
+            )
         workspace.save()
         return redirect('workspace')
 
@@ -45,3 +53,33 @@ class WorkSpaceDetailView(LoginRequiredMixin, View):
             'tasks': tasks,
         }
         return HttpResponse(templates.render(context, request))
+
+class AddMemberView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = ''
+
+    def get(self, request, workspace_id):
+
+        if(request.user != WorkSpace.objects.get(id=workspace_id).created_by):
+            return HttpResponse("You are not authorized to add members to this workspace.")
+        templates = loader.get_template('add_member.html')
+        workspace = WorkSpace.objects.get(id=workspace_id)
+        
+        users = User.objects.all()
+        # print(users)
+        # print(workspace)
+        # print(workspace.members.all())
+        context = {
+            'workspace': workspace,
+            'users': users,
+        }
+        return HttpResponse(templates.render(context, request))
+    
+    def post(self, request, workspace_id):
+        if(request.user != WorkSpace.objects.get(id=workspace_id).created_by):
+            return HttpResponse("You are not authorized to add members to this workspace.")
+        workspace = WorkSpace.objects.get(id=workspace_id)
+        username = request.POST.get('name')
+        user = User.objects.get(username=username)
+        workspace.members.add(user)
+        return redirect('workspace-detail', workspace_id=workspace_id)
