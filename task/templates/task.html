@@ -107,7 +107,7 @@
 
     <div class="header">
         <h1>Tasks</h1>
-        <a href="{% url 'add-task' %}" class="btn">+ Add Task</a>
+        <a href="{% url 'add-task' workspace_id=workspace.id %}" class="btn">+ Add Task</a>
     </div>
 
     {% if task %}

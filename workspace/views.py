@@ -32,12 +32,13 @@ class WorkSpaceCreateView(LoginRequiredMixin, View):
     
     def post(self, request):
         current_user = self.request.user
-
+        print(current_user)
+        user = User.objects.get(id=current_user.id)
         workspace = WorkSpace(
             name= request.POST.get('name'),
-            created_by = current_user,
-            members = [current_user]
+            created_by = current_user
             )
+        workspace.members.add(user)
         workspace.save()
         return redirect('workspace')
 

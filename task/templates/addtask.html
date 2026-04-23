@@ -98,7 +98,7 @@
         <h1>Add New Task</h1>
 
 
-    <form action="{% url 'add-task' %}" method="post">
+    <form action="{% url 'add-task' workspace_id=workspace.id %}" method="post">
         {% csrf_token %}
 
         <label for="task">Task</label>
@@ -107,16 +107,7 @@
         <label for="description">Description</label>
         <input type="text" id="description" name="description" placeholder="Enter description">
 
-        <!-- <label for="status">Status</label>
-        <input type="text" id="status" name="status" placeholder="e.g. Pending / Done"> -->
 
-        <label for="workspace">Workspace</label>
-        <select name="workspace" id="workspace" required>
-            <option value="" disabled selected>Choose workspace</option>
-            {% for ws in workspace %}
-                <option value="{{ ws.id }}">{{ ws.name }}</option>
-            {% endfor %}
-        </select>
 
         <input type="submit" value="Create Task">
     </form>
