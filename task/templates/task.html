@@ -1,137 +1,47 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks</title>
+{% block title %}Tasks{% endblock %}
 
+{% block content %}
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
-
-    body {
-        background-color: #f5f7fa;
-        padding: 40px;
-    }
-
-    .container {
-        max-width: 800px;
-        margin: auto;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-    }
-
-    h1 {
-        color: #333;
-    }
-
-    .btn {
-        text-decoration: none;
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 16px;
-        border-radius: 8px;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-
-    .btn:hover {
-        background-color: #45a049;
-    }
-
-    .task-list {
-        display: grid;
-        gap: 15px;
-    }
-
-    .card {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-    }
-
-    .card h4 {
-        margin-bottom: 10px;
-        color: #333;
-    }
-
-    .card ul {
-        list-style: none;
-        color: #555;
-    }
-
-    .card li {
-        margin-bottom: 5px;
-    }
-
-    .empty {
-        text-align: center;
-        color: #777;
-        margin-top: 40px;
-    }
-
-    .footer {
-        margin-top: 30px;
-        text-align: center;
-    }
-
-    .home-link {
-        text-decoration: none;
-        color: #3498db;
-        font-weight: bold;
-    }
-
-    .home-link:hover {
-        color: #2980b9;
-    }
-</style>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+    <h1>Tasks</h1>
 
 
-</head>
+{% if workspace %}
+    <a href="{% url 'add-task' workspace_id=workspace.id %}"
+       style="text-decoration: none; background-color: #4CAF50; color: white; padding: 10px 16px; border-radius: 8px; font-weight: bold;">
+        + Add Task
+    </a>
+{% endif %}
 
-<body>
-    <main class="container">
+
+</div>
+
+{% if task %} <div style="display: grid; gap: 15px;">
 
 
-    <div class="header">
-        <h1>Tasks</h1>
-        <a href="{% url 'add-task' workspace_id=workspace.id %}" class="btn">+ Add Task</a>
-    </div>
+    {% for t in task %}
+        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.08);">
+            
+            <h4 style="margin-bottom: 10px;">{{ t.task }}</h4>
 
-    {% if task %}
-        <div class="task-list">
-            {% for t in task %}
-                <div class="card">
-                    <h4>{{ t.task }}</h4>
-                    <ul>
-                        <li><strong>Description:</strong> {{ t.description }}</li>
-                        <li><strong>Status:</strong> {{ t.status }}</li>
-                    </ul>
-                </div>
-            {% endfor %}
+            <p style="color: #555; margin-bottom: 5px;">
+                <strong>Description:</strong> {{ t.description }}
+            </p>
+
+            <p style="color: #777;">
+                <strong>Status:</strong> {{ t.status }}
+            </p>
+
         </div>
-    {% else %}
-        <p class="empty">No tasks yet. Add one to get started.</p>
-    {% endif %}
+    {% endfor %}
 
-    <div class="footer">
-        <a href="{% url 'home' %}" class="home-link">← Back to Home</a>
-    </div>
-
-</main>
+</div>
 
 
-</body>
-</html>
+{% else %} <p style="text-align: center; color: #777; margin-top: 40px;">
+No tasks yet. Add one to get started. </p>
+{% endif %}
+
+{% endblock %}

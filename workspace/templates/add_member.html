@@ -1,23 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>add member</title>
-</head>
-<body>
-    <h1>Create Workspace</h1>
+{% extends "base.html" %}
 
-        <form action="add-member" method="post">
-            {% csrf_token %}
+{% block title %}Add Member{% endblock %}
 
-            <label for="name">add member </label>
-            <select name="name" id="name">
-                {% for user in users %}
-                    <option value="{{ user.username }}">{{ user.username }}</option>
-                {% endfor %}
-            </select>
-            <input type="submit" value="add member">
-        </form>
-</body>
-</html>
+{% block content %}
+
+<h1>Add Member</h1>
+
+<!-- Existing Members -->
+
+<div style="margin-top: 20px;">
+    <h3>Current Members</h3>
+
+
+{% if members %}
+    <ul style="margin-top: 10px;">
+        {% for member in members %}
+            <li style="margin-bottom: 5px;">{{ member.username }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p style="color: #777;">No members yet.</p>
+{% endif %}
+
+
+</div>
+
+<!-- Add Member Form -->
+
+<form method="post" action="{% url 'add-member' workspace.id %}" style="max-width: 400px; margin-top: 30px;">
+    {% csrf_token %}
+
+
+<div style="margin-bottom: 15px;">
+    <label style="display: block; font-weight: bold; margin-bottom: 5px;">
+        Select User
+    </label>
+
+    <select name="name"
+            style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+        {% for user in users %}
+            <option value="{{ user.username }}">{{ user.username }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<button type="submit"
+        style="background-color: #4CAF50; color: white; padding: 10px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+    Add Member
+</button>
+
+
+</form>
+
+{% endblock %}

@@ -32,13 +32,15 @@ class WorkSpaceCreateView(LoginRequiredMixin, View):
     
     def post(self, request):
         current_user = self.request.user
-        print(current_user)
-        user = User.objects.get(id=current_user.id)
         workspace = WorkSpace(
             name= request.POST.get('name'),
             created_by = current_user
             )
-        workspace.members.add(user)
+        
+        workspace.save()
+
+        workspace.members.set([current_user])
+
         workspace.save()
         return redirect('workspace')
 
@@ -70,9 +72,11 @@ class AddMemberView(LoginRequiredMixin, View):
         # print(users)
         # print(workspace)
         # print(workspace.members.all())
+        members = workspace.members.all()
         context = {
             'workspace': workspace,
             'users': users,
+            'members': members,
         }
         return HttpResponse(templates.render(context, request))
     

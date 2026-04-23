@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Task Tracker{% endblock %}</title>
+
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        background-color: #f5f7fa;
+    }
+
+    /* HEADER */
+    .header {
+        height: 60px;
+        background: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .logo {
+        font-weight: bold;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .logout {
+        text-decoration: none;
+        background: #e74c3c;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    /* LAYOUT */
+    .layout {
+        display: flex;
+        flex: 1;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        width: 220px;
+        background: #2c3e50;
+        color: white;
+        padding: 20px;
+    }
+
+    .sidebar a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    .sidebar a:hover {
+        background: #34495e;
+    }
+
+    /* CONTENT */
+    .content {
+        flex: 1;
+        padding: 30px;
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo"><a href="/">TaskTracker</a></div>
+
+    <div class="header-right">
+        <span>{{ request.user.username }}</span>
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+    </div>
+</div>
+
+<!-- BODY -->
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <a href="{% url 'workspace' %}">Workspaces</a>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</div>
+
+
+</body>
+</html>

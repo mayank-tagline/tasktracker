@@ -1,150 +1,49 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ workspace.name }}</title>
+{% block title %}{{ workspace.name }}{% endblock %}
 
+{% block content %}
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
-
-    body {
-        background-color: #f5f7fa;
-        padding: 40px;
-    }
-
-    .container {
-        max-width: 800px;
-        margin: auto;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-    }
-
-    h1 {
-        color: #333;
-    }
-
-    .actions {
-        display: flex;
-        gap: 10px;
-    }
-
-    .btn {
-        text-decoration: none;
-        padding: 8px 14px;
-        border-radius: 6px;
-        font-weight: bold;
-        color: white;
-        transition: 0.3s;
-    }
-
-    .btn-add {
-        background-color: #4CAF50;
-    }
-
-    .btn-add:hover {
-        background-color: #45a049;
-    }
-
-    .btn-member {
-        background-color: #3498db;
-    }
-
-    .btn-member:hover {
-        background-color: #2980b9;
-    }
-
-    .task-list {
-        display: grid;
-        gap: 12px;
-    }
-
-    .card {
-        background: white;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 5px 12px rgba(0,0,0,0.08);
-    }
-
-    .card h4 {
-        margin-bottom: 5px;
-        color: #333;
-    }
-
-    .status {
-        color: #777;
-        font-size: 14px;
-    }
-
-    .empty {
-        text-align: center;
-        margin-top: 30px;
-        color: #777;
-    }
-
-    .footer {
-        margin-top: 30px;
-        text-align: center;
-    }
-
-    .home-link {
-        text-decoration: none;
-        color: #3498db;
-        font-weight: bold;
-    }
-
-    .home-link:hover {
-        color: #2980b9;
-    }
-</style>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
 
 
-</head>
+<h1>{{ workspace.name }}</h1>
 
-<body>
-    <main class="container">
+<div style="display: flex; gap: 10px;">
+    <a href="{% url 'add-member' workspace.id %}"
+       style="text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; color: white; background-color: #3498db;">
+        + Add Member
+    </a>
+
+    <a href="{% url 'add-task' workspace.id %}"
+       style="text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; color: white; background-color: #4CAF50;">
+        + Add Task
+    </a>
+</div>
 
 
-    <div class="header">
-        <h1>{{ workspace.name }}</h1>
+</div>
 
-        <div class="actions">
-            <a href="{% url 'add-member' workspace.id %}" class="btn btn-member">+ Add Member</a>
-            <a href="{% url 'add-task' workspace.id %}" class="btn btn-add">+ Add Task</a>
+{% if tasks %} <div style="display: grid; gap: 12px;">
+
+
+    {% for task in tasks %}
+        <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 5px 12px rgba(0,0,0,0.08);">
+            
+            <h4 style="margin-bottom: 5px;">{{ task.task }}</h4>
+
+            <p style="color: #777; font-size: 14px;">
+                Status: {{ task.status }}
+            </p>
+
         </div>
-    </div>
+    {% endfor %}
 
-    {% if tasks %}
-        <div class="task-list">
-            {% for task in tasks %}
-                <div class="card">
-                    <h4>{{ task.task }}</h4>
-                    <p class="status">Status: {{ task.status }}</p>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p class="empty">No tasks in this workspace yet.</p>
-    {% endif %}
-
-    <div class="footer">
-        <a href="{% url 'workspace' %}" class="home-link">← Back to Workspaces</a>
-    </div>
-
-</main>
+</div>
 
 
-</body>
-</html>
+{% else %} <p style="text-align: center; margin-top: 30px; color: #777;">
+No tasks in this workspace yet. </p>
+{% endif %}
+
+{% endblock %}
