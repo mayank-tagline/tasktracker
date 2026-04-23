@@ -9,10 +9,17 @@
 
 
 {% if workspace %}
+<div style="display: flex; gap: 10px;">
+
+    <a href="{% url 'add-member' workspace.id %}"
+        style="text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; color: white; background-color: #3498db;">
+            + Add Member
+    </a>
     <a href="{% url 'add-task' workspace_id=workspace.id %}"
        style="text-decoration: none; background-color: #4CAF50; color: white; padding: 10px 16px; border-radius: 8px; font-weight: bold;">
         + Add Task
     </a>
+</div>
 {% endif %}
 
 

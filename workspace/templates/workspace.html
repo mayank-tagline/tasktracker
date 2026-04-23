@@ -20,7 +20,7 @@
 
 
     {% for space in workspace %}
-        <a href="{% url 'workspace-detail' workspace_id=space.id %}" style="text-decoration: none;">
+        <a href="{% url 'task' workspace_id=space.id %}" style="text-decoration: none;">
 
             <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); transition: 0.2s;">
                 <h4 style="color: #333;">{{ space.name }}</h4>

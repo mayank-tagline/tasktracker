@@ -41,7 +41,7 @@ class TaskCreateView(LoginRequiredMixin, View):
         workspace = WorkSpace.objects.get(id=workspace_id)
         current_user = self.request.user
 
-        print(current_user)
+        # print(current_user)
 
         task = Task(
             task= request.POST.get('task'),

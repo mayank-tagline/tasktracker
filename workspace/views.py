@@ -16,7 +16,8 @@ class WorkSpaceView(LoginRequiredMixin, View):
     def get(self, request):
         templates = loader.get_template('workspace.html')
         user = self.request.user
-        workspace = WorkSpace.objects.filter(created_by=user) | WorkSpace.objects.filter(members=user)
+        workspace = WorkSpace.objects.filter(created_by=user) or WorkSpace.objects.filter(members=user)
+        # print(workspace)
         # workspace = WorkSpace.objects.all()
         context = {
             'workspace': workspace,
@@ -73,6 +74,7 @@ class AddMemberView(LoginRequiredMixin, View):
         # print(workspace)
         # print(workspace.members.all())
         members = workspace.members.all()
+        users = [user for user in users if user not in members]
         context = {
             'workspace': workspace,
             'users': users,
@@ -87,4 +89,4 @@ class AddMemberView(LoginRequiredMixin, View):
         username = request.POST.get('name')
         user = User.objects.get(username=username)
         workspace.members.add(user)
-        return redirect('workspace-detail', workspace_id=workspace_id)
+        return redirect('task', workspace_id=workspace_id)
