@@ -96,6 +96,7 @@
                 <h4>{{ space.name }}</h4>
             </a>
 
+            {% if space.created_by == request.user or request.user.is_staff %}
             <!-- Separate update action -->
             <a href="{% url 'update-workspace' workspace_id=space.id %}" class="update-link">
                 Update
@@ -104,6 +105,7 @@
             <a href="{% url 'delete-workspace' workspace_id=space.id %}" class="delete-link">
                 Delete
             </a>
+            {% endif %}
 
         </div>
     {% endfor %}
