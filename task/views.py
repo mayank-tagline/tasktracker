@@ -6,7 +6,7 @@ from .models import Task
 from workspace.models import WorkSpace
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from todo.helper import is_user_in_workspace
+from todo.helper import is_user_in_workspace, workspace_details, workspace_tasks, task_details
 
 
 
@@ -18,11 +18,13 @@ class TaskView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = ''
     def get(self, request, workspace_id):
-        workspace = WorkSpace.objects.get(id=workspace_id)
+        workspace = workspace_details(workspace_id)
+        if workspace is None:
+            return redirect('workspace')
         if not is_user_in_workspace(self.request.user, workspace):
             return redirect('workspace')
         templates = loader.get_template('task.html')
-        task = Task.objects.filter(workspace=workspace)
+        task = workspace_tasks(workspace)
         context = {
             'task': task,
             'workspace': workspace
@@ -33,8 +35,8 @@ class TaskCreateView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = ''
     def get(self, request, workspace_id):
-        workspace = WorkSpace.objects.get(id=workspace_id)
-        if not is_user_in_workspace(self.request.user, workspace):
+        workspace = workspace_details(workspace_id)
+        if workspace is None:
             return redirect('workspace')
         context = {
             'workspace': workspace,
@@ -62,10 +64,14 @@ class TaskDeleteView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = ''
     def get(self, request, workspace_id, task_id):
-        workspace = WorkSpace.objects.get(id=workspace_id)
-        if not is_user_in_workspace(self.request.user, workspace):
+        workspace = workspace_details(workspace_id)
+        if workspace is None:
             return redirect('workspace')
-        task = Task.objects.get(id=task_id)
+        if not is_user_in_workspace(self.request.user, workspace):
+            return redirect('task' , workspace_id=workspace_id)
+        task = task_details(task_id)
+        if task is None:
+            return redirect('task' , workspace_id=workspace_id)
         context = {
             'workspace': workspace,
             'task': task
@@ -73,7 +79,9 @@ class TaskDeleteView(LoginRequiredMixin, View):
         templates = loader.get_template('deletetask.html')
         return HttpResponse(templates.render(context, request))
     def post(self, request, workspace_id, task_id):
-        task = Task.objects.get(id=task_id)
+        task = task_details(task_id)
+        if task is None:
+            return redirect('task' , workspace_id=workspace_id)
         task.delete()
         return redirect('task' , workspace_id=workspace_id)
     
@@ -82,7 +90,9 @@ class TaskUpdateView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = ''
     def get(self, request, workspace_id, task_id):
-        workspace = WorkSpace.objects.get(id=workspace_id)
+        workspace = workspace_details(workspace_id)
+        if workspace is None:
+            return redirect('task' , workspace_id=workspace_id)
         if not is_user_in_workspace(self.request.user, workspace):
             return redirect('workspace')
         
@@ -93,7 +103,9 @@ class TaskUpdateView(LoginRequiredMixin, View):
         #         return redirect('workspace')
         # if self.request.user not in workspace.members.all():
         #     return redirect('workspace')
-        task = Task.objects.get(id=task_id)
+        task = task_details(task_id)
+        if task is None:
+            return redirect('task' , workspace_id=workspace_id)
         context = {
             'workspace': workspace,
             'task': task
@@ -102,7 +114,9 @@ class TaskUpdateView(LoginRequiredMixin, View):
         return HttpResponse(templates.render(context, request))
     
     def post(self, request, workspace_id, task_id):
-        task = Task.objects.get(id=task_id)
+        task = task_details(task_id)
+        if task is None:
+            return redirect('task', workspace_id=workspace_id)
         if request.POST.get('task') =="":
             return redirect('update-task' , workspace_id=workspace_id, task_id=task_id)
         task.task = request.POST.get('task')
