@@ -4,6 +4,7 @@ from django.template import loader
 from django.views import View
 from django.contrib.auth.models import User
 from task.models import Task
+from todo.helper import is_owner, workspace_details, is_admin
 from .models import WorkSpace
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,7 +17,12 @@ class WorkSpaceView(LoginRequiredMixin, View):
     def get(self, request):
         templates = loader.get_template('workspace.html')
         user = self.request.user
-        workspace = WorkSpace.objects.filter(created_by=user) or WorkSpace.objects.filter(members=user)
+        # workspace = WorkSpace.objects.filter(created_by=user) or WorkSpace.objects.filter(members=user)
+
+        if is_admin(user):
+            workspace = WorkSpace.objects.all()
+        else:
+            workspace = WorkSpace.objects.filter(members=user)
         # print(workspace)
         # workspace = WorkSpace.objects.all()
         context = {
@@ -50,7 +56,7 @@ class WorkSpaceDetailView(LoginRequiredMixin, View):
     redirect_field_name = ''
     def get(self, request, workspace_id):
         templates = loader.get_template('workspace_detail.html')
-        workspace = WorkSpace.objects.get(id=workspace_id)
+        workspace = workspace_details(workspace_id)
         tasks = Task.objects.filter(workspace=workspace)
         context = {
             'workspace': workspace,
@@ -63,11 +69,11 @@ class AddMemberView(LoginRequiredMixin, View):
     redirect_field_name = ''
 
     def get(self, request, workspace_id):
+        workspace = workspace_details(workspace_id)
 
-        if(request.user != WorkSpace.objects.get(id=workspace_id).created_by):
+        if(not is_owner(request.user, workspace)):
             return HttpResponse("You are not authorized to add members to this workspace.")
         templates = loader.get_template('add_member.html')
-        workspace = WorkSpace.objects.get(id=workspace_id)
         
         users = User.objects.all()
         # print(users)
@@ -83,10 +89,52 @@ class AddMemberView(LoginRequiredMixin, View):
         return HttpResponse(templates.render(context, request))
     
     def post(self, request, workspace_id):
-        if(request.user != WorkSpace.objects.get(id=workspace_id).created_by):
+        workspace = workspace_details(workspace_id)
+        if not is_owner(request.user, workspace):
             return HttpResponse("You are not authorized to add members to this workspace.")
-        workspace = WorkSpace.objects.get(id=workspace_id)
         username = request.POST.get('name')
         user = User.objects.get(username=username)
         workspace.members.add(user)
         return redirect('task', workspace_id=workspace_id)
+    
+
+class WorkSpaceDeleteView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = ''
+    def get(self, request, workspace_id):
+        workspace = workspace_details(workspace_id)
+        if not is_owner(request.user, workspace):
+            return HttpResponse("You are not authorized to delete this workspace.")
+        context = {
+            'workspace': workspace,
+        }
+        templates = loader.get_template('deleteworkspace.html')
+        return HttpResponse(templates.render(context, request))
+    
+    def post(self, request, workspace_id):
+        workspace = workspace_details(workspace_id)
+        if not is_owner(request.user, workspace):
+            return HttpResponse("You are not authorized to delete this workspace.")
+        workspace.delete()
+        return redirect('workspace')
+    
+class WorkSpaceUpdateView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = ''
+    def get(self, request, workspace_id):
+        workspace = workspace_details(workspace_id)
+        if not is_owner(request.user, workspace):
+            return HttpResponse("You are not authorized to update this workspace.")
+        context = {
+            'workspace': workspace,
+        }
+        templates = loader.get_template('updateworkspace.html')
+        return HttpResponse(templates.render(context, request))
+    
+    def post(self, request, workspace_id):
+        workspace = workspace_details(workspace_id)
+        if not is_owner(request.user, workspace):
+            return HttpResponse("You are not authorized to update this workspace.")
+        workspace.name = request.POST.get('workspace')
+        workspace.save()
+        return redirect('workspace')

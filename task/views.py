@@ -45,7 +45,9 @@ class TaskCreateView(LoginRequiredMixin, View):
         return HttpResponse(templates.render(context, request))
     
     def post(self, request, workspace_id):
-        workspace = WorkSpace.objects.get(id=workspace_id)
+        workspace = workspace_details(workspace_id)
+        if workspace is None:
+            return redirect('workspace')
         current_user = self.request.user
 
         # print(current_user)

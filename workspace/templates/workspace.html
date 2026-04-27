@@ -4,35 +4,114 @@
 
 {% block content %}
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        text-decoration: none;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    .workspace-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        transition: 0.2s;
+        position: relative;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+    }
+
+    .card h4 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .delete-link {
+        display: inline-block;
+        margin-top: 10px;
+        color: #e74c3c;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .delete-link:hover {
+        color: #c0392b;
+    }
+
+    .empty {
+        text-align: center;
+        color: #777;
+        margin-top: 40px;
+    }
+</style>
+
+<div class="page-header">
     <h1>Workspaces</h1>
 
 
-<a href="{% url 'add-workspace' %}"
-   style="text-decoration: none; background-color: #4CAF50; color: white; padding: 10px 16px; border-radius: 8px; font-weight: bold;">
+<a href="{% url 'add-workspace' %}" class="btn">
     + Create Workspace
 </a>
 
 
 </div>
 
-{% if workspace %} <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+{% if workspace %} <div class="workspace-grid">
 
 
     {% for space in workspace %}
-        <a href="{% url 'task' workspace_id=space.id %}" style="text-decoration: none;">
+        <div class="card">
 
-            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); transition: 0.2s;">
-                <h4 style="color: #333;">{{ space.name }}</h4>
-            </div>
+            <!-- Clickable title only -->
+            <a href="{% url 'task' workspace_id=space.id %}" class="card-link">
+                <h4>{{ space.name }}</h4>
+            </a>
 
-        </a>
+            <!-- Separate update action -->
+            <a href="{% url 'update-workspace' workspace_id=space.id %}" class="update-link">
+                Update
+            </a>
+            <!-- Separate delete action -->
+            <a href="{% url 'delete-workspace' workspace_id=space.id %}" class="delete-link">
+                Delete
+            </a>
+
+        </div>
     {% endfor %}
 
 </div>
 
 
-{% else %} <p style="text-align: center; color: #777; margin-top: 40px;">
+{% else %} <p class="empty">
 No workspaces yet. Create one to get started. </p>
 {% endif %}
 

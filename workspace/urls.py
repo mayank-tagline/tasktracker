@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import WorkSpaceView
+from .views import WorkSpaceDeleteView, WorkSpaceUpdateView, WorkSpaceView
 from .views import WorkSpaceCreateView
 from .views import WorkSpaceDetailView
 from .views import AddMemberView
@@ -9,4 +9,6 @@ urlpatterns = [
     path('workspace/add', WorkSpaceCreateView.as_view() , name='add-workspace'),
     # path('workspace/<str:workspace_id>', WorkSpaceDetailView.as_view() , name='workspace-detail'),
     path('workspace/<str:workspace_id>/add-member', AddMemberView.as_view() , name='add-member'),
+    path('workspace/<str:workspace_id>/delete', WorkSpaceDeleteView.as_view() , name='delete-workspace'),
+    path('workspace/<str:workspace_id>/update', WorkSpaceUpdateView.as_view() , name='update-workspace'),
 ]

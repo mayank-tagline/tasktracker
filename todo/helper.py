@@ -9,6 +9,11 @@ def is_user_in_workspace(user, workspace):
         return True
     return False
 
+def is_admin(user):
+    if user.is_staff:
+        return True
+    return False
+
 def workspace_details(workspace_id):
     try:
         workspace = WorkSpace.objects.get(id=workspace_id)
@@ -29,3 +34,11 @@ def task_details(task_id):
         return task
     except Task.DoesNotExist:
         return None
+    
+
+def is_owner(user, workspace):
+    if workspace.created_by == user:
+        return True
+    if user.is_staff:
+        return True
+    return False

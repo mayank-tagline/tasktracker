@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Workspace{% endblock %}
+
+{% block content %}
+
+<h1>Delete Workspace</h1>
+
+<p style="margin-top: 10px; color: #555;">
+    Are you sure you want to delete this workspace?
+</p>
+
+<div style="margin-top: 20px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 5px 12px rgba(0,0,0,0.08); max-width: 500px;">
+
+
+<h4 style="margin-bottom: 10px;">{{ workspace.name }}</h4>
+
+
+
+</div>
+
+<form method="post" action="{% url 'delete-workspace' workspace_id=workspace.id %}" style="margin-top: 20px;">
+    {% csrf_token %}
+
+
+<div style="display: flex; gap: 10px;">
+
+    <a href="{% url 'workspace'  %}"
+       style="text-decoration: none; padding: 10px 16px; border-radius: 6px; background: #bdc3c7; color: #333; font-weight: bold;">
+        Cancel
+    </a>
+
+    <button type="submit"
+            style="background-color: #e74c3c; color: white; padding: 10px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+        Delete
+    </button>
+
+</div>
+
+
+</form>
+
+{% endblock %}
