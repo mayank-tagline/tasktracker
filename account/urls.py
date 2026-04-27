@@ -7,5 +7,5 @@ urlpatterns = [
     path('register/', RegisterView.as_view() , name='register'),
     path('logout/', LogoutView.as_view() , name='logout'),
     path('workspace/<str:workspace_id>/user/', UserView.as_view() , name='user'),
-    path('workspace/<str:workspace_id>/user/<int:user_id>/', UserDetailView.as_view() , name='user-detail'),
+    path('workspace/<str:workspace_id>/user/<str:user_id>/', UserDetailView.as_view() , name='user-detail'),
 ]
