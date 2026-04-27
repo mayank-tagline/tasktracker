@@ -31,6 +31,10 @@ ALLOWED_HOSTS = [
     "tasktracker-b031.onrender.com",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://tasktracker-b031.onrender.com"
+]
+
 
 # Application definition
 
