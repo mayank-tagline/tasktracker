@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+
+<style>
+    .profile-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+    }
+
+    .profile-card h2 {
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .profile-meta {
+        color: #777;
+        font-size: 14px;
+    }
+
+    .section-title {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .task-list {
+        display: grid;
+        gap: 15px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    }
+
+    .status {
+        font-size: 14px;
+        color: #777;
+    }
+
+    .empty {
+        text-align: center;
+        color: #777;
+        margin-top: 40px;
+    }
+</style>
+
+<!-- Profile Section -->
+
+<div class="profile-card">
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+    <p class="profile-meta">@{{ user.username }}</p>
+</div>
+
+<!-- Task Section -->
+
+<h3 class="section-title">Tasks by this user</h3>
+
+{% if task %} <div class="task-list">
+
+
+    {% for t in task %}
+        <div class="card">
+            <h4>{{ t.task }}</h4>
+            <p class="status"><strong>Status:</strong> {{ t.status }}</p>
+            <p class="status"><strong>Created By:</strong> {{ t.created_by }}</p>
+        </div>
+    {% endfor %}
+
+</div>
+
+
+{% else %} <p class="empty">
+This user has not created any tasks yet. </p>
+{% endif %}
+
+{% endblock %}

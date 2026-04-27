@@ -27,7 +27,7 @@
 
     .workspace-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 15px;
     }
 
@@ -37,7 +37,6 @@
         border-radius: 10px;
         box-shadow: 0 6px 15px rgba(0,0,0,0.08);
         transition: 0.2s;
-        position: relative;
     }
 
     .card:hover {
@@ -46,7 +45,7 @@
 
     .card h4 {
         color: #333;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
 
     .card-link {
@@ -54,18 +53,28 @@
         color: inherit;
     }
 
-    .delete-link {
-        display: inline-block;
-        margin-top: 10px;
-        color: #e74c3c;
-        font-weight: bold;
-        text-decoration: none;
-        font-size: 14px;
+    .card-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
     }
 
-    .delete-link:hover {
-        color: #c0392b;
+    .action-link {
+        text-decoration: none;
+        font-size: 13px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-weight: bold;
+        color: white;
     }
+
+    .view-users { background-color: #3498db; }
+    .update { background-color: #f39c12; }
+    .delete { background-color: #e74c3c; }
+
+    .view-users:hover { background-color: #2980b9; }
+    .update:hover { background-color: #d68910; }
+    .delete:hover { background-color: #c0392b; }
 
     .empty {
         text-align: center;
@@ -91,21 +100,29 @@
     {% for space in workspace %}
         <div class="card">
 
-            <!-- Clickable title only -->
+            <!-- Main navigation -->
             <a href="{% url 'task' workspace_id=space.id %}" class="card-link">
                 <h4>{{ space.name }}</h4>
             </a>
 
-            {% if space.created_by == request.user or request.user.is_staff %}
-            <!-- Separate update action -->
-            <a href="{% url 'update-workspace' workspace_id=space.id %}" class="update-link">
-                Update
-            </a>
-            <!-- Separate delete action -->
-            <a href="{% url 'delete-workspace' workspace_id=space.id %}" class="delete-link">
-                Delete
-            </a>
-            {% endif %}
+            <!-- Actions -->
+            <div class="card-actions">
+
+                <a href="{% url 'user' workspace_id=space.id %}" class="action-link view-users">
+                    Users
+                </a>
+
+                {% if space.created_by == request.user or request.user.is_staff %}
+                    <a href="{% url 'update-workspace' workspace_id=space.id %}" class="action-link update">
+                        Update
+                    </a>
+
+                    <a href="{% url 'delete-workspace' workspace_id=space.id %}" class="action-link delete">
+                        Delete
+                    </a>
+                {% endif %}
+
+            </div>
 
         </div>
     {% endfor %}

@@ -1,10 +1,14 @@
+from django.template import loader
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import views 
+from django.contrib.auth import views
+
+from todo.helper import is_user_in_workspace, workspace_details, workspace_tasks, workspace_user , workspace_tasks_completed
 
 
 # class HomeView(LoginRequiredMixin , View ):
@@ -75,3 +79,41 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('login')
+    
+class UserView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = ''
+    def get(self, request, workspace_id):
+        workspace = workspace_details(workspace_id)
+        if workspace is None:
+            return redirect('workspace')
+        if not is_user_in_workspace(self.request.user, workspace):
+            return redirect('workspace')
+        templates = loader.get_template('user.html')
+        user = workspace_user(workspace)
+
+        context = {
+            'users': user,
+            'workspace': workspace
+        }
+        return HttpResponse(templates.render(context, request))
+    
+class UserDetailView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = ''
+    def get(self, request, workspace_id, user_id):
+        workspace = workspace_details(workspace_id)
+        if workspace is None:
+            return redirect('workspace')
+        if not is_user_in_workspace(self.request.user, workspace):
+            return redirect('workspace')
+        templates = loader.get_template('user_detail.html')
+        user = User.objects.get(id=user_id)
+        task = workspace_tasks_completed(workspace, user)
+
+        context = {
+            'user': user,
+            'workspace': workspace,
+            'task': task
+        }
+        return HttpResponse(templates.render(context, request))

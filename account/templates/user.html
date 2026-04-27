@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-weight: bold;
+        color: white;
+        background-color: #3498db;
+    }
+
+    .btn:hover {
+        background-color: #2980b9;
+    }
+
+    .user-list {
+        display: grid;
+        gap: 15px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        transition: 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+    }
+
+    .card a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .empty {
+        text-align: center;
+        color: #777;
+        margin-top: 40px;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Users in {{ workspace.name }}</h1>
+
+
+<a href="{% url 'add-member' workspace.id %}" class="btn">
+    + Add Member
+</a>
+
+
+</div>
+
+{% if users %} <div class="user-list">
+
+
+    {% for u in users %}
+        <div class="card">
+
+            <a href="{% url 'user-detail' workspace_id=workspace.id user_id=u.id %}">
+                {{ u.first_name }} {{ u.last_name }} (@{{ u.username }})
+            </a>
+
+        </div>
+    {% endfor %}
+
+</div>
+
+
+{% else %} <p class="empty">
+No users in this workspace yet. </p>
+{% endif %}
+
+{% endblock %}

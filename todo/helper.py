@@ -42,3 +42,17 @@ def is_owner(user, workspace):
     if user.is_staff:
         return True
     return False
+
+def workspace_user(workspace):
+    try:
+        users = User.objects.filter(id__in=workspace.members.values_list('id', flat=True))
+        return users
+    except User.DoesNotExist:
+        return None
+    
+def workspace_tasks_completed(workspace, user):
+    try:
+        tasks= Task.objects.filter(workspace=workspace, completed_by=user)
+        return tasks
+    except Task.DoesNotExist:
+        return None
