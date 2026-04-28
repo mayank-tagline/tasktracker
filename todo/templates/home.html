@@ -1,25 +1,130 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Home | TaskTracker{% endblock %}
 
 {% block content %}
+<style>
+    .hero-section {
+        text-align: center;
+        padding: 80px 20px;
+        background: var(--white);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+    }
 
-<h1>Welcome to TaskTracker</h1>
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+        z-index: 0;
+    }
 
-<p style="margin-top: 10px; color: #555;">
-    Manage your workspaces and tasks efficiently.
-</p>
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
 
-<div style="margin-top: 30px; display: flex; gap: 15px;">
-    <a href="{% url 'workspace' %}" 
-       style="text-decoration: none; background-color: #4CAF50; color: white; padding: 10px 16px; border-radius: 8px; font-weight: bold;">
-        Go to Workspaces
-    </a>
+    .hero-section h1 {
+        font-size: 42px;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 20px;
+        letter-spacing: -1px;
+    }
 
+    .hero-section p {
+        font-size: 18px;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto 30px;
+        line-height: 1.6;
+    }
 
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
 
+    .feature-card {
+        padding: 30px;
+        background: var(--bg-main);
+        border-radius: var(--radius);
+        text-align: left;
+        transition: transform 0.2s;
+    }
 
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
 
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--white);
+        color: var(--primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .feature-card h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .feature-card p {
+        font-size: 14px;
+        color: var(--text-muted);
+        line-height: 1.5;
+    }
+</style>
+
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Organize your work,<br><span style="color: var(--primary);">simplify your life.</span></h1>
+        <p>TaskTracker helps you manage projects, collaborate with team members, and stay on top of your to-do list with a clean, intuitive interface.</p>
+        
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="{% url 'workspace' %}" class="btn btn-primary" style="padding: 14px 30px; font-size: 16px;">
+                Get Started
+            </a>
+            <!-- Optional secondary button -->
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+                <h3>Workspaces</h3>
+                <p>Organize different projects or teams into dedicated workspaces for better focus.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-users"></i></div>
+                <h3>Collaboration</h3>
+                <p>Invite team members to your workspaces and assign tasks to keep everyone in sync.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Track Progress</h3>
+                <p>Monitor task statuses and project completion at a glance with our modern dashboard.</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
+

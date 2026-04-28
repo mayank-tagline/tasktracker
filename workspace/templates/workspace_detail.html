@@ -1,49 +1,125 @@
 {% extends "base.html" %}
 
-{% block title %}{{ workspace.name }}{% endblock %}
+{% block title %}{{ workspace.name }} | Details{% endblock %}
 
 {% block content %}
+<style>
+    .detail-header {
+        background: var(--white);
+        padding: 30px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: var(--shadow-sm);
+    }
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+    .workspace-info h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 5px;
+    }
 
+    .workspace-info p {
+        color: var(--text-muted);
+        font-size: 14px;
+    }
 
-<h1>{{ workspace.name }}</h1>
+    .header-actions {
+        display: flex;
+        gap: 12px;
+    }
 
-<div style="display: flex; gap: 10px;">
-    <a href="{% url 'add-member' workspace.id %}"
-       style="text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; color: white; background-color: #3498db;">
-        + Add Member
-    </a>
+    .task-list {
+        display: grid;
+        gap: 16px;
+    }
 
-    <a href="{% url 'add-task' workspace.id %}"
-       style="text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; color: white; background-color: #4CAF50;">
-        + Add Task
-    </a>
+    .task-card {
+        background: var(--white);
+        padding: 20px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .task-card:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow);
+    }
+
+    .task-main h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        background: var(--bg-main);
+        color: var(--text-muted);
+    }
+
+    .status-badge.completed { background: #dcfce7; color: #166534; }
+    .status-badge.pending { background: #fef9c3; color: #854d0e; }
+
+    .empty-tasks {
+        text-align: center;
+        padding: 40px;
+        color: var(--text-muted);
+    }
+</style>
+
+<div class="detail-header">
+    <div class="workspace-info">
+        <h1>{{ workspace.name }}</h1>
+        <p>Workspace Details & Tasks</p>
+    </div>
+
+    <div class="header-actions">
+        <a href="{% url 'add-member' workspace.id %}" class="btn" style="background: #e0f2fe; color: #0369a1;">
+            <i class="fas fa-user-plus"></i> Add Member
+        </a>
+        <a href="{% url 'add-task' workspace.id %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> New Task
+        </a>
+    </div>
 </div>
 
-
-</div>
-
-{% if tasks %} <div style="display: grid; gap: 12px;">
-
-
-    {% for task in tasks %}
-        <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 5px 12px rgba(0,0,0,0.08);">
-            
-            <h4 style="margin-bottom: 5px;">{{ task.task }}</h4>
-
-            <p style="color: #777; font-size: 14px;">
-                Status: {{ task.status }}
-            </p>
-
-        </div>
-    {% endfor %}
-
-</div>
-
-
-{% else %} <p style="text-align: center; margin-top: 30px; color: #777;">
-No tasks in this workspace yet. </p>
+{% if tasks %}
+    <div class="task-list">
+        {% for task in tasks %}
+            <div class="task-card">
+                <div class="task-main">
+                    <h4>{{ task.task }}</h4>
+                    <span class="status-badge {{ task.status|lower }}">
+                        {{ task.status }}
+                    </span>
+                </div>
+                <div class="task-actions">
+                    <!-- Actions could go here -->
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card empty-tasks">
+        <i class="fas fa-tasks" style="font-size: 32px; margin-bottom: 15px; display: block;"></i>
+        <p>No tasks assigned to this workspace yet.</p>
+        <br>
+        <a href="{% url 'add-task' workspace.id %}" class="btn btn-primary">Create Task</a>
+    </div>
 {% endif %}
 
 {% endblock %}
+
