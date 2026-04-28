@@ -1,30 +1,117 @@
 {% extends "base.html" %}
 
-{% block title %}Create Workspace{% endblock %}
+{% block title %}Create Workspace | TaskTracker{% endblock %}
 
 {% block content %}
+<style>
+    .form-card {
+        max-width: 600px;
+        margin: 0 auto;
+        background: var(--white);
+        padding: 40px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
 
-<h1>Create Workspace</h1>
+    .form-header {
+        margin-bottom: 30px;
+        text-align: center;
+    }
 
-<form method="post" action="{% url 'add-workspace' %}" style="max-width: 500px; margin-top: 20px;">
-    {% csrf_token %}
+    .form-header h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
 
+    .form-group {
+        margin-bottom: 24px;
+    }
 
-    <div style="margin-bottom: 15px;">
-        <label style="display: block; font-weight: bold; margin-bottom: 5px;">
-            Workspace Name
-        </label>
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
 
-        <input type="text" name="name" placeholder="Enter workspace name" required
-            style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+    .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        outline: none;
+        transition: all 0.2s;
+        font-size: 15px;
+    }
+
+    .form-group input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .btn-submit {
+        flex: 1;
+        padding: 12px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-submit:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        flex: 1;
+        padding: 12px;
+        background: var(--bg-main);
+        color: var(--text-muted);
+        text-align: center;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+        background: #e2e8f0;
+        color: var(--text-main);
+    }
+</style>
+
+<div class="form-card">
+    <div class="form-header">
+        <h1>Create New Workspace</h1>
     </div>
 
-    <button type="submit"
-            style="background-color: #4CAF50; color: white; padding: 10px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-        Create Workspace
-    </button>
+    <form method="post" action="{% url 'add-workspace' %}">
+        {% csrf_token %}
 
+        <div class="form-group">
+            <label for="name">Workspace Name</label>
+            <input type="text" id="name" name="name" placeholder="e.g. Marketing Team, Development, Personal" required>
+        </div>
 
-</form>
+        <div class="form-actions">
+            <a href="{% url 'workspace' %}" class="btn-cancel">Cancel</a>
+            <button type="submit" class="btn-submit">Create Workspace</button>
+        </div>
+    </form>
+</div>
 
 {% endblock %}
+

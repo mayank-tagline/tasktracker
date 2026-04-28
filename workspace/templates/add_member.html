@@ -1,55 +1,152 @@
 {% extends "base.html" %}
 
-{% block title %}Add Member{% endblock %}
+{% block title %}Manage Members | {{ workspace.name }}{% endblock %}
 
 {% block content %}
+<style>
+    .manage-container {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: 30px;
+        align-items: start;
+    }
 
-<h1>Add Member</h1>
+    .members-card, .add-card {
+        background: var(--white);
+        padding: 30px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+    }
 
-<!-- Existing Members -->
+    .card-header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border);
+    }
 
-<div style="margin-top: 20px;">
-    <h3>Current Members</h3>
+    .card-header h2 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
 
+    .member-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
 
-{% if members %}
-    <ul style="margin-top: 10px;">
-        {% for member in members %}
-            <li style="margin-bottom: 5px;">{{ member.username }}</li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p style="color: #777;">No members yet.</p>
-{% endif %}
+    .member-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        background: var(--bg-main);
+        border-radius: 10px;
+        font-weight: 500;
+    }
 
+    .member-avatar {
+        width: 32px;
+        height: 32px;
+        background: var(--primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+    }
 
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
+
+    .form-group select {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        outline: none;
+        transition: all 0.2s;
+        font-size: 15px;
+        background-color: var(--white);
+    }
+
+    .form-group select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    @media (max-width: 900px) {
+        .manage-container { grid-template-columns: 1fr; }
+    }
+</style>
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Manage Members</h1>
+        <p style="color: var(--text-muted);">Workspace: <strong>{{ workspace.name }}</strong></p>
+    </div>
+    <a href="{% url 'task' workspace_id=workspace.id %}" class="btn" style="background: var(--bg-main);">
+        <i class="fas fa-arrow-left"></i> Back to Tasks
+    </a>
 </div>
 
-<!-- Add Member Form -->
+<div class="manage-container">
+    <!-- Current Members -->
+    <div class="members-card">
+        <div class="card-header">
+            <h2>Current Members</h2>
+        </div>
+        {% if members %}
+            <ul class="member-list">
+                {% for member in members %}
+                    <li class="member-item">
+                        <div class="member-avatar">{{ member.username|slice:":1"|upper }}</div>
+                        <span>{{ member.username }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: var(--text-muted); text-align: center; padding: 20px;">No members yet.</p>
+        {% endif %}
+    </div>
 
-<form method="post" action="{% url 'add-member' workspace.id %}" style="max-width: 400px; margin-top: 30px;">
-    {% csrf_token %}
+    <!-- Add Member Form -->
+    <div class="add-card">
+        <div class="card-header">
+            <h2>Add New Member</h2>
+        </div>
+        <form method="post" action="{% url 'add-member' workspace.id %}">
+            {% csrf_token %}
 
+            <div class="form-group">
+                <label for="user_select">Select User to Invite</label>
+                <select name="name" id="user_select">
+                    {% for user in users %}
+                        <option value="{{ user.username }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-<div style="margin-bottom: 15px;">
-    <label style="display: block; font-weight: bold; margin-bottom: 5px;">
-        Select User
-    </label>
-
-    <select name="name"
-            style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
-        {% for user in users %}
-            <option value="{{ user.username }}">{{ user.username }}</option>
-        {% endfor %}
-    </select>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <i class="fas fa-user-plus"></i> Add Member
+            </button>
+        </form>
+    </div>
 </div>
-
-<button type="submit"
-        style="background-color: #4CAF50; color: white; padding: 10px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-    Add Member
-</button>
-
-
-</form>
 
 {% endblock %}
+
