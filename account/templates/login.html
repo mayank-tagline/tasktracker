@@ -1,141 +1,183 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login | TaskTracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-main: #f8fafc;
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 16px;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    body {
-        background-color: #f5f7fa;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+        .login-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.5s ease-out;
+        }
 
-    .container {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        width: 350px;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    h1 span {
-        color: #4CAF50;
-    }
+        .header i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
 
-    .alert {
-        background-color: #e3f2fd;
-        padding: 10px;
-        border-radius: 6px;
-        margin-bottom: 15px;
-        color: #333;
-    }
+        .header h1 {
+            font-size: 24px;
+            color: var(--text-main);
+            font-weight: 700;
+        }
 
-    label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: bold;
-        color: #555;
-    }
+        .alert {
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #fecaca;
+        }
 
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        outline: none;
-    }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    input:focus {
-        border-color: #4CAF50;
-    }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-main);
+        }
 
-    .btn {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        border-radius: 8px;
-        background-color: #4CAF50;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
 
-    .btn:hover {
-        background-color: #45a049;
-    }
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
 
-    .register {
-        text-align: center;
-        margin-top: 12px;
-    }
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
 
-    .register a {
-        text-decoration: none;
-        color: #3498db;
-        font-weight: bold;
-    }
+        .btn-login:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
 
-    .register a:hover {
-        color: #2980b9;
-    }
-</style>
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
 
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
 
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
 <body>
-    <div class="container">
-
-
-    <form method="post">
-        {% csrf_token %}
-
-        <h1><span>Login</span></h1>
-
-        {% if messages %}
-            <div class="alert">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <label>Username</label>
-        <input type="text" name="username" placeholder="Enter username" required>
-
-        <label>Password</label>
-        <input type="password" name="password" placeholder="Enter password" required>
-
-        <button type="submit" class="btn">Login</button>
-
-        <div class="register">
-            <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    <div class="login-card">
+        <div class="header">
+            <i class="fas fa-check-double"></i>
+            <h1>Welcome Back</h1>
         </div>
 
-    </form>
+        <form method="post">
+            {% csrf_token %}
 
-</div>
+            {% if messages %}
+                <div class="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
 
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
 
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-login">Sign In</button>
+
+            <div class="footer">
+                Don't have an account? <a href="{% url 'register' %}">Create account</a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
+

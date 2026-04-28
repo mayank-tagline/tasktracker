@@ -1,55 +1,138 @@
 {% extends "base.html" %}
 
-{% block title %}Update Task{% endblock %}
+{% block title %}Update Task | TaskTracker{% endblock %}
 
 {% block content %}
+<style>
+    .form-card {
+        max-width: 600px;
+        margin: 0 auto;
+        background: var(--white);
+        padding: 40px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
 
-<h1>Update Task</h1>
+    .form-header {
+        margin-bottom: 30px;
+        text-align: center;
+    }
 
-<p style="margin-top: 10px; color: #555;">
-    Edit the details of your task below.
-</p>
+    .form-header h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
 
-<form method="post" action="{% url 'update-task' workspace_id=workspace.id task_id=task.id %}" style="max-width: 500px; margin-top: 20px;">
-    {% csrf_token %}
+    .form-group {
+        margin-bottom: 24px;
+    }
 
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
 
-<div style="margin-bottom: 15px;">
-    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Task</label>
-    <input type="text" name="task" value="{{ task.task }}" required
-           style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+    .form-group input, .form-group textarea, .form-group select {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        outline: none;
+        transition: all 0.2s;
+        font-size: 15px;
+        font-family: inherit;
+        background-color: var(--white);
+    }
+
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .btn-submit {
+        flex: 1;
+        padding: 12px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-submit:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        flex: 1;
+        padding: 12px;
+        background: var(--bg-main);
+        color: var(--text-muted);
+        text-align: center;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+        background: #e2e8f0;
+        color: var(--text-main);
+    }
+</style>
+
+<div class="form-card">
+    <div class="form-header">
+        <h1>Update Task</h1>
+        <p style="color: var(--text-muted); margin-top: 8px;">Editing task in <strong>{{ workspace.name }}</strong></p>
+    </div>
+
+    <form method="post" action="{% url 'update-task' workspace_id=workspace.id task_id=task.id %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="task">Task Title</label>
+            <input type="text" id="task" name="task" value="{{ task.task }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" placeholder="Provide more details about this task...">{{ task.description }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="pending" {% if task.status == "pending" %}selected{% endif %}>Pending</option>
+                <option value="completed" {% if task.status == "completed" %}selected{% endif %}>Completed</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'task' workspace.id %}" class="btn-cancel">Cancel</a>
+            <button type="submit" class="btn-submit">Update Task</button>
+        </div>
+    </form>
 </div>
-
-<div style="margin-bottom: 15px;">
-    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Description</label>
-    <input type="text" name="description" value="{{ task.description }}"
-           style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
-</div>
-
-<div style="margin-bottom: 20px;">
-    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Status</label>
-    <select name="status"
-            style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
-        <option value="pending" {% if task.status == "pending" %}selected{% endif %}>Pending</option>
-        <option value="completed" {% if task.status == "completed" %}selected{% endif %}>Completed</option>
-    </select>
-</div>
-
-<div style="display: flex; gap: 10px;">
-
-    <a href="{% url 'task' workspace.id %}"
-       style="text-decoration: none; padding: 10px 16px; border-radius: 6px; background: #bdc3c7; color: #333; font-weight: bold;">
-        Cancel
-    </a>
-
-    <button type="submit"
-            style="background-color: #4CAF50; color: white; padding: 10px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
-        Update
-    </button>
-
-</div>
-
-
-</form>
 
 {% endblock %}
+
