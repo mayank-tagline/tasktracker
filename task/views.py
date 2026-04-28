@@ -23,13 +23,12 @@ class TaskView(LoginRequiredMixin, View):
             return redirect('workspace')
         if not is_user_in_workspace(self.request.user, workspace):
             return redirect('workspace')
-        templates = loader.get_template('task.html')
         task = workspace_tasks(workspace)
         context = {
             'task': task,
             'workspace': workspace
         }
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'task.html', context)
     
 class TaskCreateView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -41,8 +40,7 @@ class TaskCreateView(LoginRequiredMixin, View):
         context = {
             'workspace': workspace,
         }
-        templates = loader.get_template('addtask.html')
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'addtask.html', context)
     
     def post(self, request, workspace_id):
         workspace = workspace_details(workspace_id)
@@ -78,8 +76,7 @@ class TaskDeleteView(LoginRequiredMixin, View):
             'workspace': workspace,
             'task': task
         }
-        templates = loader.get_template('deletetask.html')
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'deletetask.html', context)
     def post(self, request, workspace_id, task_id):
         task = task_details(task_id)
         if task is None:
@@ -112,8 +109,7 @@ class TaskUpdateView(LoginRequiredMixin, View):
             'workspace': workspace,
             'task': task
         }
-        templates = loader.get_template('updatetask.html')
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'updatetask.html', context)
     
     def post(self, request, workspace_id, task_id):
         task = task_details(task_id)

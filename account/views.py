@@ -89,14 +89,13 @@ class UserView(LoginRequiredMixin, View):
             return redirect('workspace')
         if not is_user_in_workspace(self.request.user, workspace):
             return redirect('workspace')
-        templates = loader.get_template('user.html')
         user = workspace_user(workspace)
 
         context = {
             'users': user,
             'workspace': workspace
         }
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'user.html', context)
     
 class UserDetailView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -107,7 +106,6 @@ class UserDetailView(LoginRequiredMixin, View):
             return redirect('workspace')
         if not is_user_in_workspace(self.request.user, workspace):
             return redirect('workspace')
-        templates = loader.get_template('user_detail.html')
         user = User.objects.get(id=user_id)
         task = workspace_tasks_completed(workspace, user)
 
@@ -116,4 +114,4 @@ class UserDetailView(LoginRequiredMixin, View):
             'workspace': workspace,
             'task': task
         }
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'user_detail.html', context)

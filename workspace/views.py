@@ -15,7 +15,6 @@ class WorkSpaceView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = ''
     def get(self, request):
-        templates = loader.get_template('workspace.html')
         user = self.request.user
         # workspace = WorkSpace.objects.filter(created_by=user) or WorkSpace.objects.filter(members=user)
 
@@ -28,14 +27,13 @@ class WorkSpaceView(LoginRequiredMixin, View):
         context = {
             'workspace': workspace,
         }
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'workspace.html', context)
     
 class WorkSpaceCreateView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = ''
     def get(self, request):
-        templates = loader.get_template('addworkspace.html')
-        return HttpResponse(templates.render())
+        return render(request, 'addworkspace.html')
     
     def post(self, request):
         current_user = self.request.user
@@ -55,14 +53,13 @@ class WorkSpaceDetailView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = ''
     def get(self, request, workspace_id):
-        templates = loader.get_template('workspace_detail.html')
         workspace = workspace_details(workspace_id)
         tasks = Task.objects.filter(workspace=workspace)
         context = {
             'workspace': workspace,
             'tasks': tasks,
         }
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'workspace_detail.html', context)
 
 class AddMemberView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -73,7 +70,6 @@ class AddMemberView(LoginRequiredMixin, View):
 
         if(not is_owner(request.user, workspace)):
             return HttpResponse("You are not authorized to add members to this workspace.")
-        templates = loader.get_template('add_member.html')
         
         users = User.objects.all()
         # print(users)
@@ -86,7 +82,7 @@ class AddMemberView(LoginRequiredMixin, View):
             'users': users,
             'members': members,
         }
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'add_member.html', context)
     
     def post(self, request, workspace_id):
         workspace = workspace_details(workspace_id)
@@ -108,8 +104,7 @@ class WorkSpaceDeleteView(LoginRequiredMixin, View):
         context = {
             'workspace': workspace,
         }
-        templates = loader.get_template('deleteworkspace.html')
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'deleteworkspace.html', context)
     
     def post(self, request, workspace_id):
         workspace = workspace_details(workspace_id)
@@ -128,8 +123,7 @@ class WorkSpaceUpdateView(LoginRequiredMixin, View):
         context = {
             'workspace': workspace,
         }
-        templates = loader.get_template('updateworkspace.html')
-        return HttpResponse(templates.render(context, request))
+        return render(request, 'updateworkspace.html', context)
     
     def post(self, request, workspace_id):
         workspace = workspace_details(workspace_id)
